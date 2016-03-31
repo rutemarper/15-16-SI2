@@ -1,0 +1,37 @@
+Modelo Relacional
+
+	Utilizador(email, palavra-passe, nome, morada)
+		PK = {email}
+	
+	HistoricoUtilizador(dataTempo, morada, email)
+		FK = {email} ref Utilizador(email)
+		PK = {email, dataTempo}	
+	
+	Artigo(id, dataTempo)
+		 PK = {id}
+		 
+	Leilao(artigoId, dataTempo, licitacaoMin, valorMaxn)
+		FK = {artigoId, dataTempo} ref Artigo (id, dataTempo)
+		PK = {artigoId}
+		
+	VendaDirecta(artigoId, dataTempo, precoVenda)
+		FK = {artigoId, dataTempo} ref Artigo (id, dataTempo)
+		PK = {artigoId}
+	
+	Venda(descricao, dataInicio, dataFim, localizacao, condicao, email, artigoId)
+		FK = {email} ref Utilizador(email)
+		FK = {artigoId} ref Artigo(id)
+		PK = {email, artigoId}
+		
+	Licitacao(dataHora, check, preco, email, artigoId)
+		FK = {email} ref Utilizador(email)
+		FK = {{artigoId} ref Artigo(id)
+		PK = {email, artigoId}
+	
+	Compra(dataCompra, codigo, localizacao, cartaoCredito)
+		FK = {email} ref Utilizador(email)
+		FK = {{artigoId} ref Artigo(id)
+		PK = {email, artigoId, codigo}
+
+	Porte(preco, moradaOrigem, moradaDestino)
+		PK = {preco, moradaOrigem, moradaDestino}
