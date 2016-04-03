@@ -1,7 +1,7 @@
-
-	--faço um trigger q coloca a palavra em md5
+use ISEL
+--trigger q coloca a palavra em md5
 if OBJECT_ID('dbo.codificarPass') is not null
-	drop proc dbo.codificarPass
+	drop trigger dbo.codificarPass
 	go
 
 create trigger codificarPass on dbo.Utilizador
@@ -14,3 +14,6 @@ as
 		if (@pp<>null)
 			update Utilizador set palavraPasse=(SELECT HashBytes('MD5',@pp))
 	end
+
+
+	

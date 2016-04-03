@@ -42,7 +42,7 @@ go
  
 create proc dbo.atualizarUtilizador @email varchar(100), @pp varchar(50)=null, @nome varchar(50)=null, @morada varchar(100)=null
 as
-	if(DATALENGTH(@pp)>0)
+	if(DATALENGTH(@pp)>6)
 		update dbo.Utilizador set palavraPasse=@pp where email=@email;
 	if(DATALENGTH(@nome)>0)
 		update dbo.Utilizador set nome=@nome where email=@email;
@@ -56,12 +56,12 @@ as
 go
 
 --test
-exec dbo.inserirUtilizador @email='sss_sara11@hotmail.com', @pp='xxx', @nome='Sara', @morada='Casal de Cambra'
-exec dbo.inserirUtilizador @email='a40602@alunos.isel.pt', @pp='zzz', @nome=null, @morada='Casal de Cambra'
+exec dbo.inserirUtilizador @email='sss_sara11@hotmail.com', @pp='xxxxxxxxx', @nome='Sara', @morada='Casal de Cambra'
+exec dbo.inserirUtilizador @email='a40602@alunos.isel.pt', @pp='zzzzzzzzz', @nome=null, @morada='Casal de Cambra'
 --atualizar nome 
 exec dbo.atualizarUtilizador @email='a40602@alunos.isel.pt', @nome='Sara Sobral'
 --atualizar palavra-passe
-exec dbo.atualizarUtilizador @email='a40602@alunos.isel.pt', @pp='yyy', @nome=null, @morada=null
+exec dbo.atualizarUtilizador @email='a40602@alunos.isel.pt', @pp='yyyyyyyyy', @nome=null, @morada=null
 --atualizar morada
 exec dbo.atualizarUtilizador @email='sss_sara11@hotmail.com', @pp=null, @nome='Sobral', @morada='Sintra'
 select*from HistoricoUtilizador

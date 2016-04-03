@@ -1,0 +1,32 @@
+Restrições
+
+Utilizador:
+	mail- único. O sistema não deve permitir alterações.
+	password- ñ visivel, fica registado apenas em hash MD5.
+
+Venda:
+	condição- "novo", "usado", "como novo", "velharia vintage".
+
+Tipo de Venda:
+	id- único.
+
+Leilão:
+	licitação min- entre 1€ e 10% do valor total. Se o valor minimo ñ for atingido ñ há venda do produto.
+
+Licitação:
+	para Venda Directa- só é válida se o valor for igual ao valor de venda.
+	para Leilão- tem q ser úçtima licitação + licitação min.
+	data/hora- única e com precisão de milissegundos.
+	Ñ há novas licitações após tempo terminal.
+	É possível um utilizador retirar uma licitação q efectuou, desde q dentro do período de venda, mas essa informação ñ pode ser removida do sistema. 
+
+Compra:
+	código- único
+	dataCompra- tem que ser diferente da data de licitação em caso de leilão.
+	Vencedor(quem licitou mais alto) tem 2 dias p efectuar a compra. Após esse tempo a compra ñ é possivel.
+
+Portes:
+	preço- definido de acordo com o ISO 3166-1.
+
+
+Em qualquer momento deve ser possível simular o custo total de compra, usando um valor de licitação válido e uma localização de entrega.

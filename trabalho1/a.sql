@@ -12,7 +12,7 @@ create database [ISEL];
 */
 
 go
-use [ISEL]
+use ISEL
 begin tran
 
 if OBJECT_ID('dbo.Compra') is not null
@@ -45,31 +45,34 @@ create table dbo.Porte(
 create table dbo.Utilizador(
 	email varchar(100) primary key,
 	palavraPasse varchar(50) not null,
-	--faço um trigger q de seguida coloca isto em md5??????????????????????????????? sim
 	nome varchar(50),
-	morada varchar(100) not null
+	morada varchar(100) not null,
+	unCheck int default 1, 
+	check(DATALENGTH(palavraPasse)>6 and (unCheck=0 or unCheck=1)) 
 )
 go
 
 create table dbo.HistoricoUtilizador(
-	dataTempo dateTime, 
-	morada varchar(100), 
+	dataTempo dateTime not null, 
+	morada varchar(100) not null, 
 	email varchar(100),
 	primary key(email, dataTempo),
-	foreign key(email) references Utilizador
+	foreign key(email) references Utilizador(email),
 )
 go
 create table dbo.Artigo(
 	id int identity(1,1) primary key,
-	dataTempo dateTime unique
+	dataTempo dateTime not null,
+	unCheck int default 1, 
+	check(unCheck=0 or unCheck=1)
 )
 go
 create table dbo.Leilao(
-	artigoId int primary key, 
+	artigoId int primary key , 
 	licitacaoMin money not null, 
 	valorMin money not null,
 	foreign key(artigoId) references Artigo(id),
-	check (licitacaoMin between 1 and 0.10*valorMin and valorMin>0)
+	check ((licitacaoMin>1 or licitacaoMin>0.10*valorMin) and valorMin>0)
 )
 
 create table dbo.VendaDirecta(
@@ -81,17 +84,19 @@ create table dbo.VendaDirecta(
 
 create table dbo.Venda(
 	descricao varchar(100), 
-	dataInicio dateTime, 
-	dataFim dateTime, 
-	localOrigem varchar(2), 
+	dataInicio dateTime not null, 
+	dataFim dateTime not null, 
+	localOrigem varchar(2) not null, 
 	condicao varchar(16), 
 	email varchar(100), 
 	artigoId int,
+	unCheck int default 1, 	
 	primary key(email, artigoId),
 	constraint fk1_idArtigo foreign key(artigoId) references Artigo,
 	constraint fk1_emailUtilizador foreign key(email) references Utilizador,
 	check (condicao='Novo' or condicao='Usado' or condicao='Como novo' or condicao='Velharia vintage'),
-	check (dataFim>dataInicio)
+	check (dataFim>dataInicio),
+	check(unCheck=0 or unCheck=1)
 )
 
 create table dbo.Licitacao(
@@ -107,14 +112,16 @@ create table dbo.Licitacao(
 )
 
 create table dbo.Compra(
-	dataCompra dateTime, 
 	codigo int identity(1,1) primary key, --implica ter o email e o id com pk?????????
-	localDestino varchar(2), 
-	cartaoCredito int,
+	dataCompra dateTime not null,
+	localDestino varchar(2) not null, 
+	cartaoCredito int not null,
 	email varchar(100), 
 	artigoId int,
+	unCheck int default 1, 
 	constraint fk3_idArtigo foreign key(artigoId) references Artigo,
-	constraint fk3_emailUtilizador foreign key(email) references Utilizador
+	constraint fk3_emailUtilizador foreign key(email) references Utilizador,
+	check (unCheck=0 or unCheck=1)
 )
 go
 commit
