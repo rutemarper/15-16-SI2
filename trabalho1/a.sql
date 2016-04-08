@@ -38,8 +38,9 @@ create table dbo.Porte(
 	preco money, 
 	moradaOrigem varchar(2), 
 	moradaDestino varchar(2),
+	unCheck int default 1, 
 	primary key(preco, moradaOrigem, moradaDestino),
-	check (preco>0)
+	check (preco>0 AND (unCheck=0 or unCheck=1))
 )
 
 create table dbo.Utilizador(

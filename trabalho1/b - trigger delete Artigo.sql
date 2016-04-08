@@ -1,6 +1,8 @@
 use ISEL
 go
 --(b) Inserir, remover e actualizar informação de um artigo;
+if OBJECT_ID('dbo.deleteArtigo') is not null
+	drop trigger dbo.deleteArtigo
 if OBJECT_ID('dbo.inserirArtigo') is not null
 	drop proc dbo.inserirArtigo
 if OBJECT_ID('dbo.atualizarArtigo') is not null
@@ -8,6 +10,18 @@ if OBJECT_ID('dbo.atualizarArtigo') is not null
 if OBJECT_ID('dbo.apagarArtigo') is not null
 	drop proc dbo.apagarArtigo
 go
+--fazer o mesmo para Leilao e vendaDireta
+create trigger dbo.deleteArtigo on dbo.Artigo
+INSTEAD OF DELETE
+as
+	declare @artigo varchar(100)
+	select @artigo = (select id from deleted)
+	UPDATE dbo.Artigo set unCheck=0 where id=@artigo
+	UPDATE dbo.Compra set unCheck=0 where artigoId=@artigo
+	UPDATE dbo.Licitacao set unCheck=0 where artigoId=@artigo
+	UPDATE dbo.Venda set unCheck=0 where artigoId=@artigo
+go
+
 create proc dbo.inserirArtigo @data datetime
 as
 	insert into dbo.Artigo(dataTempo) values (@data)

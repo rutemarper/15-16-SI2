@@ -1,13 +1,27 @@
 use ISEL
 go
 --(d) Inserir, remover e actualizar informação de um local;
-
+if OBJECT_ID('dbo.deleteLocal') is not null
+	drop trigger dbo.deleteLocal
 if OBJECT_ID('dbo.inserirLocal') is not null
 	drop proc dbo.inserirLocal
 if OBJECT_ID('dbo.atualizarLocal') is not null
 	drop proc dbo.atualizarLocal
 if OBJECT_ID('dbo.apagarLocal') is not null
 	drop proc dbo.apagarLocal
+go
+create trigger dbo.deleteArtigo on dbo.Porte
+INSTEAD OF DELETE
+as
+	declare @local varchar(100)
+	select @local = (select moradaDestino from deleted)
+	if(DATALENGTH(@local)<1)
+		select @local = (select moradaOrigem from deleted)
+	update Utilizador set unCheck=0 where morada=@local
+	update venda set unCheck=0 where localOrigem=@local
+	update Compra set unCheck=0 where localDestino=@local
+	update Porte set unCheck=0 where moradaDestino=@local OR moradaOrigem=@local
+
 go
 create proc dbo.inserirLocal @preco money, @locOrigem varchar(2), @locDestino varchar(2)
 as
